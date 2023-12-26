@@ -1,0 +1,433 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="adminID" />
+          </Key>
+          <Property Name="adminID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ad" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="soyad" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="eMail" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="sifre" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="telefon" Type="nvarchar" MaxLength="45" />
+          <Property Name="adres" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="dergi">
+          <Key>
+            <PropertyRef Name="ISSN" />
+          </Key>
+          <Property Name="ISSN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ad" Type="nvarchar" MaxLength="50" />
+          <Property Name="YayınEvi" Type="nvarchar" MaxLength="50" />
+          <Property Name="sonTarih" Type="datetime" />
+          <Property Name="kategori" Type="nchar" MaxLength="10" />
+          <Property Name="aciklama" Type="nvarchar(max)" />
+          <Property Name="fotograf" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="islem">
+          <Key>
+            <PropertyRef Name="islemID" />
+          </Key>
+          <Property Name="islemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="uyeID" Type="int" Nullable="false" />
+          <Property Name="sonTarihi" Type="datetime" />
+          <Property Name="adminID" Type="int" />
+          <Property Name="ISSN" Type="int" />
+          <Property Name="ISBN" Type="int" />
+          <Property Name="emanetDurumu" Type="nvarchar" MaxLength="50" />
+          <Property Name="alisTarih" Type="datetime" />
+        </EntityType>
+        <EntityType Name="kitap">
+          <Key>
+            <PropertyRef Name="ISBN" />
+          </Key>
+          <Property Name="ISBN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ad" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="yazar" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="baskiYili" Type="datetime" />
+          <Property Name="kategori" Type="nchar" MaxLength="10" />
+          <Property Name="yayinEvi" Type="nvarchar" MaxLength="45" />
+          <Property Name="sayfaSayisi" Type="nvarchar" MaxLength="45" />
+          <Property Name="fotograf" Type="varbinary(max)" />
+          <Property Name="aciklama" Type="nvarchar(max)" />
+          <Property Name="kitapDurumu" Type="int" Nullable="false" />
+          <Property Name="adminID" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="uye">
+          <Key>
+            <PropertyRef Name="uyeID" />
+          </Key>
+          <Property Name="uyeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ad" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="soyad" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="eMail" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="sifre" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="telefon" Type="nvarchar" MaxLength="45" />
+          <Property Name="adres" Type="nvarchar" MaxLength="45" />
+          <Property Name="uyelikDurumu" Type="int" Nullable="false" />
+          <Property Name="adminID" Type="int" Nullable="false" />
+          <Property Name="ParaCezasi" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_islem_admin">
+          <End Role="admin" Type="Self.admin" Multiplicity="0..1" />
+          <End Role="islem" Type="Self.islem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin">
+              <PropertyRef Name="adminID" />
+            </Principal>
+            <Dependent Role="islem">
+              <PropertyRef Name="adminID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_islem_dergi">
+          <End Role="dergi" Type="Self.dergi" Multiplicity="0..1" />
+          <End Role="islem" Type="Self.islem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dergi">
+              <PropertyRef Name="ISSN" />
+            </Principal>
+            <Dependent Role="islem">
+              <PropertyRef Name="ISSN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_islem_kitap">
+          <End Role="kitap" Type="Self.kitap" Multiplicity="0..1" />
+          <End Role="islem" Type="Self.islem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kitap">
+              <PropertyRef Name="ISBN" />
+            </Principal>
+            <Dependent Role="islem">
+              <PropertyRef Name="ISBN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_islem_uye">
+          <End Role="uye" Type="Self.uye" Multiplicity="1" />
+          <End Role="islem" Type="Self.islem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="uye">
+              <PropertyRef Name="uyeID" />
+            </Principal>
+            <Dependent Role="islem">
+              <PropertyRef Name="uyeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="dergi" EntityType="Self.dergi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="islem" EntityType="Self.islem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="kitap" EntityType="Self.kitap" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="uye" EntityType="Self.uye" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_islem_admin" Association="Self.FK_islem_admin">
+            <End Role="admin" EntitySet="admin" />
+            <End Role="islem" EntitySet="islem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_islem_dergi" Association="Self.FK_islem_dergi">
+            <End Role="dergi" EntitySet="dergi" />
+            <End Role="islem" EntitySet="islem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_islem_kitap" Association="Self.FK_islem_kitap">
+            <End Role="kitap" EntitySet="kitap" />
+            <End Role="islem" EntitySet="islem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_islem_uye" Association="Self.FK_islem_uye">
+            <End Role="uye" EntitySet="uye" />
+            <End Role="islem" EntitySet="islem" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="adminID" />
+          </Key>
+          <Property Name="adminID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="soyad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="eMail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sifre" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="telefon" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="adres" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="islem" Relationship="Self.FK_AdminID" FromRole="admin" ToRole="islem" />
+        </EntityType>
+        <EntityType Name="dergi">
+          <Key>
+            <PropertyRef Name="ISSN" />
+          </Key>
+          <Property Name="ISSN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YayınEvi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sonTarih" Type="DateTime" Precision="3" />
+          <Property Name="kategori" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="aciklama" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fotograf" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="islem" Relationship="Self.FK_islem_dergi" FromRole="dergi" ToRole="islem" />
+        </EntityType>
+        <EntityType Name="islem">
+          <Key>
+            <PropertyRef Name="islemID" />
+          </Key>
+          <Property Name="islemID" Type="Int32" Nullable="false" />
+          <Property Name="uyeID" Type="Int32" Nullable="false" />
+          <Property Name="sonTarihi" Type="DateTime" Precision="3" />
+          <Property Name="adminID" Type="Int32" />
+          <Property Name="ISSN" Type="Int32" />
+          <Property Name="ISBN" Type="Int32" />
+          <Property Name="emanetDurumu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="alisTarih" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="admin" Relationship="Self.FK_AdminID" FromRole="islem" ToRole="admin" />
+          <NavigationProperty Name="dergi" Relationship="Self.FK_islem_dergi" FromRole="islem" ToRole="dergi" />
+          <NavigationProperty Name="kitap" Relationship="Self.FK_islem_kitap" FromRole="islem" ToRole="kitap" />
+          <NavigationProperty Name="uye" Relationship="Self.FK_UyeID" FromRole="islem" ToRole="uye" />
+        </EntityType>
+        <EntityType Name="kitap">
+          <Key>
+            <PropertyRef Name="ISBN" />
+          </Key>
+          <Property Name="ISBN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="yazar" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="baskiYili" Type="DateTime" Precision="3" />
+          <Property Name="kategori" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="yayinEvi" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="sayfaSayisi" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="fotograf" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="aciklama" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="kitapDurumu" Type="Int32" Nullable="false" />
+          <Property Name="adminID" Type="Int32" />
+          <NavigationProperty Name="islem" Relationship="Self.FK_islem_kitap" FromRole="kitap" ToRole="islem" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="uye">
+          <Key>
+            <PropertyRef Name="uyeID" />
+          </Key>
+          <Property Name="uyeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="soyad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="eMail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sifre" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="telefon" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="adres" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="uyelikDurumu" Type="Int32" Nullable="false" />
+          <Property Name="adminID" Type="Int32" Nullable="false" />
+          <Property Name="ParaCezasi" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="islem" Relationship="Self.FK_UyeID" FromRole="uye" ToRole="islem" />
+        </EntityType>
+        <Association Name="FK_AdminID">
+          <End Role="admin" Type="Self.admin" Multiplicity="0..1" />
+          <End Role="islem" Type="Self.islem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin">
+              <PropertyRef Name="adminID" />
+            </Principal>
+            <Dependent Role="islem">
+              <PropertyRef Name="adminID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_islem_dergi">
+          <End Role="dergi" Type="Self.dergi" Multiplicity="0..1" />
+          <End Role="islem" Type="Self.islem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dergi">
+              <PropertyRef Name="ISSN" />
+            </Principal>
+            <Dependent Role="islem">
+              <PropertyRef Name="ISSN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_islem_kitap">
+          <End Role="kitap" Type="Self.kitap" Multiplicity="0..1" />
+          <End Role="islem" Type="Self.islem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kitap">
+              <PropertyRef Name="ISBN" />
+            </Principal>
+            <Dependent Role="islem">
+              <PropertyRef Name="ISBN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UyeID">
+          <End Role="uye" Type="Self.uye" Multiplicity="1" />
+          <End Role="islem" Type="Self.islem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="uye">
+              <PropertyRef Name="uyeID" />
+            </Principal>
+            <Dependent Role="islem">
+              <PropertyRef Name="uyeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KutuphaneEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="admin" EntityType="Self.admin" />
+          <EntitySet Name="dergi" EntityType="Self.dergi" />
+          <EntitySet Name="islem" EntityType="Self.islem" />
+          <EntitySet Name="kitap" EntityType="Self.kitap" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="uye" EntityType="Self.uye" />
+          <AssociationSet Name="FK_AdminID" Association="Self.FK_AdminID">
+            <End Role="admin" EntitySet="admin" />
+            <End Role="islem" EntitySet="islem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_islem_dergi" Association="Self.FK_islem_dergi">
+            <End Role="dergi" EntitySet="dergi" />
+            <End Role="islem" EntitySet="islem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_islem_kitap" Association="Self.FK_islem_kitap">
+            <End Role="kitap" EntitySet="kitap" />
+            <End Role="islem" EntitySet="islem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UyeID" Association="Self.FK_UyeID">
+            <End Role="uye" EntitySet="uye" />
+            <End Role="islem" EntitySet="islem" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="KutuphaneEntities1">
+          <EntitySetMapping Name="admin">
+            <EntityTypeMapping TypeName="Model.admin">
+              <MappingFragment StoreEntitySet="admin">
+                <ScalarProperty Name="adminID" ColumnName="adminID" />
+                <ScalarProperty Name="ad" ColumnName="ad" />
+                <ScalarProperty Name="soyad" ColumnName="soyad" />
+                <ScalarProperty Name="eMail" ColumnName="eMail" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+                <ScalarProperty Name="telefon" ColumnName="telefon" />
+                <ScalarProperty Name="adres" ColumnName="adres" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dergi">
+            <EntityTypeMapping TypeName="Model.dergi">
+              <MappingFragment StoreEntitySet="dergi">
+                <ScalarProperty Name="ISSN" ColumnName="ISSN" />
+                <ScalarProperty Name="ad" ColumnName="ad" />
+                <ScalarProperty Name="YayınEvi" ColumnName="YayınEvi" />
+                <ScalarProperty Name="sonTarih" ColumnName="sonTarih" />
+                <ScalarProperty Name="kategori" ColumnName="kategori" />
+                <ScalarProperty Name="aciklama" ColumnName="aciklama" />
+                <ScalarProperty Name="fotograf" ColumnName="fotograf" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="islem">
+            <EntityTypeMapping TypeName="Model.islem">
+              <MappingFragment StoreEntitySet="islem">
+                <ScalarProperty Name="islemID" ColumnName="islemID" />
+                <ScalarProperty Name="uyeID" ColumnName="uyeID" />
+                <ScalarProperty Name="sonTarihi" ColumnName="sonTarihi" />
+                <ScalarProperty Name="adminID" ColumnName="adminID" />
+                <ScalarProperty Name="ISSN" ColumnName="ISSN" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="emanetDurumu" ColumnName="emanetDurumu" />
+                <ScalarProperty Name="alisTarih" ColumnName="alisTarih" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kitap">
+            <EntityTypeMapping TypeName="Model.kitap">
+              <MappingFragment StoreEntitySet="kitap">
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="ad" ColumnName="ad" />
+                <ScalarProperty Name="yazar" ColumnName="yazar" />
+                <ScalarProperty Name="baskiYili" ColumnName="baskiYili" />
+                <ScalarProperty Name="kategori" ColumnName="kategori" />
+                <ScalarProperty Name="yayinEvi" ColumnName="yayinEvi" />
+                <ScalarProperty Name="sayfaSayisi" ColumnName="sayfaSayisi" />
+                <ScalarProperty Name="fotograf" ColumnName="fotograf" />
+                <ScalarProperty Name="aciklama" ColumnName="aciklama" />
+                <ScalarProperty Name="kitapDurumu" ColumnName="kitapDurumu" />
+                <ScalarProperty Name="adminID" ColumnName="adminID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="uye">
+            <EntityTypeMapping TypeName="Model.uye">
+              <MappingFragment StoreEntitySet="uye">
+                <ScalarProperty Name="uyeID" ColumnName="uyeID" />
+                <ScalarProperty Name="ad" ColumnName="ad" />
+                <ScalarProperty Name="soyad" ColumnName="soyad" />
+                <ScalarProperty Name="eMail" ColumnName="eMail" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+                <ScalarProperty Name="telefon" ColumnName="telefon" />
+                <ScalarProperty Name="adres" ColumnName="adres" />
+                <ScalarProperty Name="uyelikDurumu" ColumnName="uyelikDurumu" />
+                <ScalarProperty Name="adminID" ColumnName="adminID" />
+                <ScalarProperty Name="ParaCezasi" ColumnName="ParaCezasi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
